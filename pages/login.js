@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
 
-export function Login() {
+function Login() {
   const whatsappLogo =
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2042px-WhatsApp.svg.png";
 
