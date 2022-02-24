@@ -9,6 +9,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { collection, addDoc, query, where } from "firebase/firestore";
+import Chat from "./Chat";
 
 function Sidebar() {
   const [user] = useAuthState(auth);
@@ -73,7 +74,9 @@ function Sidebar() {
 
       <SidebarButton onClick={createChat}>Start a New Chat</SidebarButton>
 
-      {/* List of chats */}
+      {chatsSnapshot?.docs.map((chat) => (
+        <Chat key={chat.id} id={chat.id} users={chat.data().users} />
+      ))}
     </Container>
   );
 }
