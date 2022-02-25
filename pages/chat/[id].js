@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
     }))
     .map((msgs) => ({
       ...msgs,
-      timestamp: messages.timestamp.toDate().getTime(),
+      timestamp: msgs.timestamp.toDate().getTime(),
     }));
 
   // PREP the chats
