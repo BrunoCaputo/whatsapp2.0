@@ -51,6 +51,7 @@ function Sidebar() {
     <Container>
       <Header>
         <UserAvatar
+          src={user.photoURL}
           onClick={() => {
             signOut(auth);
           }}
