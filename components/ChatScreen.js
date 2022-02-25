@@ -16,9 +16,12 @@ import {
   setDoc,
   Timestamp,
   addDoc,
+  where,
 } from "firebase/firestore";
 import Message from "./Message";
 import { useState } from "react";
+import getRecipientEmail from "../utils/getRecipientEmail";
+import TimeAgo from "timeago-react";
 
 function Chatscreen({ chat, messages }) {
   const [user] = useAuthState(auth);
@@ -29,6 +32,10 @@ function Chatscreen({ chat, messages }) {
       collection(db, `chats/${router.query.id}/messages`),
       orderBy("timestamp", "asc")
     )
+  );
+  const recipientEmail = getRecipientEmail(chat.users, user);
+  const [recipientSnapshot] = useCollection(
+    query(collection(db, "users"), where("email", "==", recipientEmail))
   );
 
   const showMessages = () => {
@@ -73,14 +80,27 @@ function Chatscreen({ chat, messages }) {
     setInput("");
   };
 
+  const recipient = recipientSnapshot?.docs?.[0]?.data();
+
   return (
     <Container>
       <Header>
         <Avatar />
 
         <HeaderInformation>
-          <h3>Rec Email</h3>
-          <p>Last seen ...</p>
+          <h3>{recipientEmail}</h3>
+          {recipientSnapshot ? (
+            <p>
+              Last active:{" "}
+              {recipient?.lastSeen?.toDate() ? (
+                <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
+              ) : (
+                "Unavailable"
+              )}
+            </p>
+          ) : (
+            <p>Loading last active...</p>
+          )}
         </HeaderInformation>
         <HeaderIcons>
           <IconButton>
